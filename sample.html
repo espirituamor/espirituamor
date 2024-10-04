@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+</head>
+<body>
+  
+<ion-app>
+    <ion-header>
+        <ion-toolbar color="tertiary">
+            <ion-title>DISCOUNT CODE</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <ion-item>
+            <ion-input id="name" label="Name" label-placement="floating" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-input id="productName" label="Product Name" label-placement="floating" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-input id="productPrice" label="Product Price" label-placement="floating" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Discounted?</ion-label>
+            <ion-select id="discount" placeholder="Select option" (ionChange)="myFunction()">
+                <ion-select-option value="Yes">Yes</ion-select-option>
+                <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item id="discountCodeItem" style="display: none;">
+            <ion-input id="discountCode" label="Discount Code" label-placement="floating" type="text"></ion-input>
+        </ion-item>
+
+        <br>
+        <ion-button expand="block" onclick="triggerMode()" color="tertiary">APPLY DISCOUNT</ion-button>
+        
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>ORDER SUMMARY</ion-card-title>
+            </ion-card-header>
+            <ion-card-content id="res"></ion-card-content>
+        </ion-card>
+    </ion-content>
+</ion-app>
+
+<script>
+        document.getElementById('discount').addEventListener('ionChange', myFunction);
+        function myFunction(){
+        const discount = document.getElementById('discount').value;
+        const discountCodeItem = document.getElementById('discountCodeItem');
+
+        if (discount === 'Yes') {
+            discountCodeItem.style.display = 'block';
+            } else {
+            discountCodeItem.style.display = 'none'; 
+            document.getElementById('discountCode').value = ''; 
+            }
+        }
+        
+        function triggerMode() {
+            const name = document.getElementById('name').value;
+            const productName = document.getElementById('productName').value;
+            const productPrice = parseFloat(document.getElementById('productPrice').value);
+            const discount = document.getElementById('discount').value; 
+            const discountCode = document.getElementById('discountCode').value; 
+
+            let discountedPrice = productPrice; 
+            let discountCodeMessage = discountCode;
+            if (discount === 'Yes') {
+                if (discountCode === 'DISCOUNT10') {
+                    discountedPrice = productPrice - (productPrice * 0.10);
+                    discountCodeMessage = `<p><strong>Discount Code: </strong> ${discountCode} (Valid)</p>`;
+                } else {
+                    discountedPrice = productPrice
+                    discountCodeMessage = `<p><strong>Discount Code: </strong> ${discountCode} (Invalid)</p>`;
+                }
+            } else{
+                discountCodeMessage = `<p><strong>Discount Code: </strong>No Discount </p>`;
+            }
+
+            document.getElementById('res').innerHTML = `<strong>Name:</strong>${name} <br> <strong>Product Name:</strong> ${productName} <br> <strong>Price:</strong>: 
+                                                        ${productPrice.toFixed(2)} <br>  <strong> ${discountCodeMessage} <strong>Total Price:</strong> 
+                                                        ${discountedPrice.toFixed(2)}`;
+    }
+</script>
+</body>
+</html>
